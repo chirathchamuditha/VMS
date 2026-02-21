@@ -1,0 +1,259 @@
+<div class="fixed inset-0">
+    <div class="pt-32 px-6 flex flex-col items-center">
+        <h3
+            class="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-700 text-transparent bg-clip-text text-center mb-10">
+            Welcome, {{ user.username }} get your data in and out of VMS with ease! Import your vehicles or export your
+            data seamlessly.
+        </h3>
+
+        <div class="flex flex-wrap justify-center gap-6">
+            <!-- Card 1 -->
+            <div
+                class="bg-[#0f1c2e] hover:bg-[#065f46] text-white rounded-2xl shadow-lg w-64 h-64 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300" (click)="openImportModal()">
+                <img src="folder.png" class="h-12 w-12" alt="Vehicle Icon">
+                <span class="text-center font-semibold">Import Your Vehicles</span>
+            </div>
+
+            <!-- Card 2 -->
+            <div
+                class="bg-[#0f1c2e] hover:bg-[#065f46] text-white rounded-2xl shadow-lg w-64 h-64 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300" (click)="openExportModal()">
+                <img src="export.png" class="h-12 w-12" alt="Vehicle Icon">
+                <span class="text-center font-semibold">Export Vehicle Data</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Import Modal -->
+<div *ngIf="showImportModal"
+     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+     (click)="closeImportModal()">
+
+  <div class="bg-white w-full max-w-lg rounded-xl shadow-xl"
+       (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b">
+      <h2 class="text-lg font-semibold flex items-center gap-2 text-gray-800">
+        <i class="fas fa-file-import text-emerald-500"></i>
+        Import Vehicles from Excel/CSV
+      </h2>
+
+      <button (click)="closeImportModal()"
+              class="text-gray-500 hover:text-red-500 transition">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6">
+
+      <!-- Error Message -->
+      <div *ngIf="error"
+           class="mb-4 bg-red-100 text-red-700 px-4 py-2 rounded-md text-sm flex items-center gap-2">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ error }}
+      </div>
+
+      <!-- File Upload -->
+      <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-emerald-500 transition mb-4">
+
+        <label for="import-file"
+               class="cursor-pointer flex flex-col items-center gap-2 text-gray-600">
+
+          <i class="fas fa-cloud-upload-alt text-3xl text-emerald-500"></i>
+
+          <span *ngIf="!selectedFile" class="text-sm">
+            Click to select Excel or CSV file
+          </span>
+
+          <span *ngIf="selectedFile" class="text-sm font-medium text-gray-800">
+            {{ selectedFile.name }}
+          </span>
+        </label>
+
+        <input id="import-file"
+               type="file"
+               accept=".csv,.xlsx,.xls"
+               (change)="onFileSelected($event)"
+               class="hidden" />
+      </div>
+
+      <!-- Info Section -->
+      <div class="bg-blue-50 text-blue-700 text-sm p-4 rounded-md flex gap-2">
+        <i class="fas fa-info-circle mt-1"></i>
+        <p>
+          Upload an Excel or CSV file with vehicle data. The file should contain columns:
+          <span class="font-medium">
+            firstName, lastName, email, carMake, carModel, vin, manufacturedDate.
+          </span>
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-3 px-6 py-4 border-t bg-gray-50 rounded-b-xl">
+
+      <button (click)="closeImportModal()"
+              class="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400 text-sm transition">
+        Cancel
+      </button>
+
+      <button (click)="uploadImportFile()"
+              class="px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white text-sm flex items-center gap-2 transition">
+        Upload
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Export Modal -->
+<div *ngIf="showExportModal"
+     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+     (click)="closeExportModal()">
+
+  <div class="bg-white w-full max-w-md rounded-xl shadow-xl"
+       (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b">
+      <h2 class="text-lg font-semibold flex items-center gap-2 text-gray-800">
+        <i class="fas fa-file-export text-emerald-500"></i>
+        Export Vehicles to CSV
+      </h2>
+
+      <button (click)="closeExportModal()"
+              class="text-gray-500 hover:text-red-500 transition">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6">
+
+      <!-- Error Message -->
+      <div *ngIf="error"
+           class="mb-4 bg-red-100 text-red-700 px-4 py-2 rounded-md text-sm flex items-center gap-2">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ error }}
+      </div>
+
+      <!-- Select Age Criteria -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Select Age Criteria
+        </label>
+
+        <select [(ngModel)]="exportCriteria"
+                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <option value="all">All Vehicles</option>
+          <option value="1year">Vehicles 1 year or older</option>
+          <option value="3years">Vehicles 3 years or older</option>
+          <option value="5years">Vehicles 5 years or older</option>
+          <option value="10years">Vehicles 10 years or older</option>
+        </select>
+      </div>
+
+      <!-- Info Section -->
+      <div class="bg-blue-50 text-blue-700 text-sm p-4 rounded-md flex gap-2">
+        <i class="fas fa-info-circle mt-1"></i>
+        <p>
+          The CSV file will be generated and saved on the server.
+          Check the exports folder after completion.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-3 px-6 py-4 border-t bg-gray-50 rounded-b-xl">
+
+      <button (click)="closeExportModal()"
+              class="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400 text-sm transition">
+        Cancel
+      </button>
+
+      <button (click)="exportVehicles()"
+              class="px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-400 text-white text-sm flex items-center gap-2 transition">
+        Export
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- Job Progress Modal -->
+<div *ngIf="showJobProgress"
+     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+  <div class="bg-white w-full max-w-md rounded-xl shadow-xl"
+       (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b">
+      <h2 class="text-lg font-semibold flex items-center gap-2 text-gray-800">
+        <i class="fas fa-sync-alt text-emerald-500 animate-spin"></i>
+        {{ currentJobType === 'import' ? 'Import' : 'Export' }} in Progress
+      </h2>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6">
+      
+      <!-- Status Info -->
+      <div class="mb-6 space-y-3">
+        <div class="flex justify-between items-center">
+          <span class="text-gray-600 text-sm font-medium">Status:</span>
+          <span class="text-emerald-600 font-semibold text-sm capitalize">{{ jobStatus }}</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-600 text-sm font-medium">Job ID:</span>
+          <span class="text-gray-700 font-mono text-xs">{{ currentJobId }}</span>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-gray-600 text-sm">Progress</span>
+          <span class="text-emerald-600 text-sm font-semibold">{{ jobProgress }}%</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-3">
+          <div class="bg-emerald-500 h-3 rounded-full transition-all duration-300"
+               [style.width.%]="jobProgress"></div>
+        </div>
+      </div>
+
+      <!-- Results (if completed) -->
+      <div *ngIf="jobResult && jobStatus === 'completed'"
+           class="mb-6 bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+        <h3 class="font-semibold text-emerald-700 mb-2 flex items-center gap-2">
+          <i class="fas fa-check-circle"></i>
+          Import Results
+        </h3>
+        <div class="space-y-1 text-sm">
+          <p><span class="text-gray-600">Total Records:</span> <span class="font-semibold">{{ jobResult?.total || 0 }}</span></p>
+          <p><span class="text-gray-600">Imported:</span> <span class="font-semibold text-emerald-600">{{ jobResult?.imported || 0 }}</span></p>
+          <p><span class="text-gray-600">Failed:</span> <span class="font-semibold text-red-600">{{ jobResult?.failed || 0 }}</span></p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-3 px-6 py-4 border-t bg-gray-50 rounded-b-xl">
+      <button (click)="closeJobProgress()"
+              class="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400 text-sm transition">
+        {{ jobStatus === 'completed' || jobStatus === 'failed' ? 'Close' : 'Minimize' }}
+      </button>
+    </div>
+
+  </div>
+</div>

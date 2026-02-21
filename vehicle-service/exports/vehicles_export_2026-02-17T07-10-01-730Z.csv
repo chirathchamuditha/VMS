@@ -1,0 +1,16 @@
+ID,First Name,Last Name,Email,Car Make,Car Model,VIN,Manufactured Date,Age of Vehicle (Years)
+1b541eb5-699c-48e8-8cb9-4e107d351050,Sarah,Davis,sarah.davis@example.com,BMW,3 Series,WBA8E1C50HK123456,2023-02-14,3
+2914311f-045f-4abe-8e59-71176e9834b6,Michelle,White,michelle.w@example.com,Kia,Sportage,KNDPM3AC0K7123456,2022-09-30,3
+3254213f-1531-4eb1-8538-0cd29a4c13a1,David,Brown,david.brown@example.com,Chevrolet,Silverado,1GCUYDED0LZ123456,2018-11-30,7
+3a81dc43-8523-46e8-92b1-1a154dfb1a8a,Daniel,Harris,daniel.h@example.com,Lexus,RX350,2T2BZMCA8KC123456,2020-12-05,5
+3a826495-fd45-48d6-af7b-ac2e4b3304c6,John,Doe,john.doe@example.com,Toyota,Camry,1HGBH41JXMN109186,2020-05-15,5
+4fd3ab02-8f1a-4283-9493-e745a57102f9,Jennifer,Taylor,jennifer.t@example.com,Hyundai,Elantra,5NPD84LF4KH123456,2022-06-25,3
+5f64c0cf-78ad-4277-a3af-604ceb1fbfa0,Robert,Moore,robert.moore@example.com,Nissan,Altima,1N4AL3AP8KC123456,2019-12-03,6
+79a84792-8888-4727-8745-8d716902e41c,Amanda,Thomas,amanda.t@example.com,Subaru,Outback,4S4BSANC5M3123456,2021-04-18,4
+80c725b7-7fbe-4546-8eca-e9f3d30c66cf,Michael,Johnson,michael.j@example.com,Ford,F-150,1FTFW1EF5EFC12345,2021-03-10,4
+9823a27f-4b50-4cdf-b115-747c6082ed6b,Chris,Anderson,chris.a@example.com,Mazda,CX-5,JM3KFBDM8M0123456,2020-10-12,5
+afc35390-a730-43ba-9625-4ab0419981f9,Lisa,Wilson,lisa.wilson@example.com,Audi,A4,WAUFFAFL0DN123456,2021-09-19,4
+b0158ab1-4935-4732-9beb-ae85212a86a3,James,Miller,james.miller@example.com,Mercedes,C-Class,WDDWF4HB9EF123456,2020-07-08,5
+bd028633-b847-4ddc-8c01-debf5439225b,Emily,Williams,emily.w@example.com,Tesla,Model 3,5YJ3E1EA5KF123456,2022-01-05,4
+dc59c73d-cce2-49c0-8acb-890ab97478d4,Kevin,Jackson,kevin.j@example.com,Volkswagen,Jetta,3VW2B7AJ8KM123456,2019-07-25,6
+e1dea107-8ebd-42d2-8cb0-d6f9f3a64c8f,Jane,Smith,jane.smith@example.com,Honda,Civic,2HGFC2F59FH123456,2019-08-22,6

@@ -1,0 +1,274 @@
+<div class="fixed inset-0 overflow-y-auto">
+
+  <ngx-sonner-toaster></ngx-sonner-toaster>
+
+  <!-- Main Content -->
+  <div class="pt-32 px-6 w-full pb-20">
+
+    <!-- Add New Service Button -->
+    <div class="w-[95%] mx-auto mb-6">
+      <button (click)="addService()"
+        class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-md transition font-semibold">
+        + Add New Service
+      </button>
+    </div>
+
+    <!-- Full Width VIN Dropdown -->
+    <div class="w-[95%] mx-auto mb-10">
+      <label class="block mb-2 font-semibold text-emerald-800">
+        Select VIN and View Service History
+      </label>
+
+      <select [(ngModel)]="selectedVIN" (change)="handleVinChange()"
+        class="w-full px-5 py-4 rounded-xl border border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-md bg-white">
+        <option value="">-- Select VIN --</option>
+        <option *ngFor="let vehicle of vehicles" [value]="vehicle.vin">
+          {{vehicle.firstName}} {{ vehicle.lastName }} - {{ vehicle.vin }} - {{ vehicle.carMake }} {{ vehicle.carModel
+          }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="w-[95%] mx-auto">
+      <!-- Service records will go here -->
+      <div class="w-[95%] mx-auto">
+
+        <div *ngIf="selectedServices.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <div *ngFor="let service of selectedServices"
+            class="bg-gray-800 rounded-2xl shadow-lg p-6 border border-emerald-200 hover:shadow-xl transition">
+
+            <h3 class="text-lg font-semibold text-white mb-2">
+              {{ service.serviceType }}
+            </h3>
+
+            <p class="text-sm text-gray-300 mb-2">
+              Service Date
+            </p>
+
+            <div class="text-emerald-600 font-bold text-lg">
+              {{ service.serviceDate | date:'yyyy-MM-dd' }}
+            </div>
+
+            <p class="text-sm text-gray-300 mb-2 mt-2">
+              Next Service Date
+            </p>
+
+            <div class="text-emerald-300 font-bold text-lg">
+              {{ service.nextServiceDate | date:'yyyy-MM-dd' }}
+            </div>
+
+            <p class="text-sm text-gray-300 mb-2 mt-2">
+              Cost
+            </p>
+
+            <div class="text-emerald-300 font-bold text-lg">
+              RS.{{ service.cost }}.00
+            </div>
+
+            <p class="text-sm text-gray-300 mb-2 mt-2">
+              Technician
+            </p>
+
+            <div class="text-emerald-300 font-bold text-lg">
+              {{ service.technician }}
+            </div>
+
+            
+
+            <div class="flex justify-end gap-3">
+              <button (click)="editService(service)"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                Edit
+              </button>
+
+              <button (click)="deleteService(service)"
+                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
+                Delete
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- No Services Message -->
+        <div *ngIf="selectedVIN && selectedServices.length === 0" class="text-red-500 font-semibold mt-4">
+          No service history found for this VIN.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Add New Service Modal -->
+<div *ngIf="showAddServiceModal"
+     class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+  <div class="bg-white rounded-lg shadow-md w-full max-w-lg p-4 max-h-[85vh] overflow-y-auto">
+
+    <h2 class="text-xl font-semibold mb-4">
+      Add New Service
+    </h2>
+
+    <!-- Service Type -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Service Type *</label>
+      <select [(ngModel)]="newService.serviceType"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+        <option value="">Select</option>
+        <option *ngFor="let type of serviceTypes" [value]="type">
+          {{ type }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Description</label>
+      <textarea [(ngModel)]="newService.description"
+        rows="2"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+      </textarea>
+    </div>
+
+    <!-- Cost -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Cost</label>
+      <input type="number" [(ngModel)]="newService.cost"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+    </div>
+
+    <!-- Service Date -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Service Date *</label>
+      <input type="date" [(ngModel)]="newService.serviceDate"
+        max="{{ today }}"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+    </div>
+
+    <!-- Service Provider -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Service Provider *</label>
+      <input type="text" [(ngModel)]="newService.serviceProvider"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+    </div>
+
+    <!-- Technician -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Technician</label>
+      <input type="text" [(ngModel)]="newService.technician"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+    </div>
+
+    <!-- Next Service Date -->
+    <div class="mb-4">
+      <label class="block text-sm mb-1">Next Service Date</label>
+      <input type="date" [(ngModel)]="newService.nextServiceDate"
+        min="{{today}}"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex gap-3 mt-3">
+      <button (click)="submitNewService()" [disabled]="submitting"
+        class="flex-1 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-400 text-white py-2 rounded-md text-sm transition">
+        Create
+      </button>
+
+      <button (click)="closeAddServiceModal()" [disabled]="submitting"
+        class="flex-1 bg-gray-300 hover:bg-gray-400 disabled:bg-gray-200 py-2 rounded-md text-sm transition">
+        Cancel
+      </button>
+    </div>
+
+  </div>
+</div>
+<!-- Edit Service Modal -->
+<div *ngIf="isEditModalOpen"
+     class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+  <div class="bg-white rounded-lg shadow-md w-full max-w-lg p-4 max-h-[85vh] overflow-y-auto">
+
+    <h2 class="text-xl font-semibold mb-4">
+      Edit Service
+    </h2>
+
+    <!-- Service Type -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Service Type *</label>
+      <select [(ngModel)]="newService.serviceType"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+        <option value="">Select</option>
+        <option *ngFor="let type of serviceTypes" [value]="type">
+          {{ type }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Description</label>
+      <textarea [(ngModel)]="newService.description"
+        rows="2"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+      </textarea>
+    </div>
+
+    <!-- Cost -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Cost</label>
+      <input type="number" [(ngModel)]="newService.cost"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+    </div>
+
+    <!-- Service Date -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Service Date *</label>
+      <input type="date" [(ngModel)]="newService.serviceDate"
+        max="{{ today }}"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+    </div>
+
+    <!-- Service Provider -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Service Provider *</label>
+      <input type="text" [(ngModel)]="newService.serviceProvider"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+    </div>
+
+    <!-- Technician -->
+    <div class="mb-2">
+      <label class="block text-sm mb-1">Technician</label>
+      <input type="text" [(ngModel)]="newService.technician"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+    </div>
+
+    <!-- Next Service Date -->
+    <div class="mb-4">
+      <label class="block text-sm mb-1">Next Service Date</label>
+      <input type="date" [(ngModel)]="newService.nextServiceDate"
+        min="{{today}}"
+        class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex gap-3 mt-3">
+      <button (click)="submitEditService()" [disabled]="submitting"
+        class="flex-1 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white py-2 rounded-md text-sm transition">
+        Update
+      </button>
+
+      <button (click)="closeEditServiceModal()" [disabled]="submitting"
+        class="flex-1 bg-gray-300 hover:bg-gray-400 disabled:bg-gray-200 py-2 rounded-md text-sm transition">
+        Cancel
+      </button>
+    </div>
+
+  </div>
+</div>

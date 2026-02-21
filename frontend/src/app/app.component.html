@@ -1,0 +1,75 @@
+<div class="fixed inset-0">
+
+  <!-- Navbar -->
+  <div class="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] z-50">
+    <div class="bg-[#0f1c2e] rounded-2xl shadow-2xl 
+                flex items-center justify-between 
+                px-10 py-4">
+
+      <!-- Logo -->
+      <div class="flex items-center gap-3">
+        <span class="text-xl font-bold text-emerald-400">VMS</span>
+      </div>
+
+      <!-- Navigation -->
+      <div class="flex items-center gap-10 text-gray-300 font-medium">
+        <a (click)="goToDashboard()" [ngClass]="isOnDashboard() ? 'text-green-400 border-b-2 border-green-400 pb-1 cursor-pointer' : 'hover:text-white transition cursor-pointer'">Dashboard</a>
+        <a (click)="goToVehicles()" [ngClass]="isOnVehicles() ? 'text-green-400 border-b-2 border-green-400 pb-1 cursor-pointer' : 'hover:text-white transition cursor-pointer'">Vehicles</a>
+        <a (click)="goToServiceRec()" [ngClass]="isOnServiceRec() ? 'text-green-400 border-b-2 border-green-400 pb-1 cursor-pointer' : 'hover:text-white transition cursor-pointer'">Services</a>
+      </div>
+
+      <!-- Time & Date -->
+     <div class="flex flex-col items-end text-right"> 
+      <div class="text-2xl font-bold text-blue-400">{{ currentTime }}</div> 
+      <div class="text-sm text-emerald-500 font-bold">{{ currentDate }}</div> 
+    </div>
+
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="pt-32 px-6 flex flex-col items-center">
+
+    <!-- Dashboard Content -->
+    <ng-container *ngIf="isOnDashboard()">
+    <!-- Welcome Text -->
+    <h1 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-700 text-transparent bg-clip-text text-center mb-10">
+      Welcome, {{ user.username }} to Vehicle Management System!
+    </h1>
+
+    <!-- Cards -->
+    <div class="flex flex-wrap justify-center gap-6">
+
+      <!-- Card 1 -->
+      <div class="bg-[#0f1c2e] hover:bg-[#065f46] text-white rounded-2xl shadow-lg w-64 h-64 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300"
+       (click)="goToVehicles()">
+         <img src="smart-car.png" class="h-12 w-12" alt="Vehicle Icon">
+        <span class="text-center font-semibold">Vehicle Management</span>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-[#0f1c2e] hover:bg-[#065f46] text-white rounded-2xl shadow-lg w-64 h-64 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300" (click)="goToServiceRec()">
+        <img src="24-hours.png" class="h-12 w-12" alt="Vehicle Icon">
+        <span class="text-center font-semibold">Service Management</span>
+      </div>
+
+      <!-- Card 3 (optional) -->
+      <div class="bg-[#0f1c2e] hover:bg-[#065f46] text-white rounded-2xl shadow-lg w-64 h-64 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300" (click)="goToImportExport()">
+        <img src="xls.png" class="h-12 w-12" alt="Vehicle Icon">
+        <span class="text-center font-semibold">Import / Export</span>
+      </div>
+
+    </div>
+    </ng-container>
+
+    <!-- Router Outlet for navigated components -->
+    <router-outlet></router-outlet>
+
+  </div>
+
+  <!-- Footer (only show on dashboard) -->
+  <div *ngIf="isOnDashboard()" class="fixed bottom-0 left-1/2 -translate-x-1/2 w-[95%] bg-[#0f1c2e] text-gray-300 text-sm text-center py-10 mb-5 rounded-2xl shadow-inner">
+    © 2026 Vehicle Management System. Fortude Assesment.
+  </div>
+
+</div>
